@@ -54,7 +54,7 @@ io.emit("receive_album",data)
 
 dotenv.config();
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin:["http://localhost:3000", process.env.FRONTEND_URL]}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
