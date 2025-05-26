@@ -70,8 +70,6 @@ const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
 
-
-
 app.get("/auth/google", (req, res) => {
   const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:${PORT}/auth/google/callback&response_type=code&scope=profile email`;
   res.redirect(googleAuthUrl);
@@ -92,7 +90,7 @@ app.get("/auth/google/callback", async (req, res) => {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
-        redirect_uri: `http://localhost:${PORT}/auth/google/callback`,
+        redirect_uri: `https://shimbapix.onrender.com/auth/google/callback`,
       },
       {
         headers: {
@@ -218,7 +216,6 @@ app.post("/images", upload.single("image"), async (req, res) => {
     const result = await cloudinary.uploader.upload(file.path, {
       folder: "uploads",
     });
-    console.log("Result: ", tags);
     const newImage = new ImageV2({
       imageId,
       albumId,
@@ -279,7 +276,6 @@ app.delete("/v1/shareData/:id",async(req,res)=>{
   const albumId = req.params.id
   try{
     const allData = await ShareData.deleteMany({album:albumId})
-    console.log(allData)
     res.status(200).json({message:"Share data deleted",data:allData})
   }catch(error){
     res.status(500).json({message:"Error while delete share album",error:error})
