@@ -16,13 +16,13 @@ const UserModel = require("./models/user.model.js");
 const ShareData = require("./models/Shares.model.js")
 const PORT = 4000;
 const http = require('http')
-const https = require("https")
 const {Server} = require('socket.io')
-const server=https.createServer(app)
+const server=http.createServer(app)
 
 const io=new Server(server,{
   cors:{
-    origin:"https://simba-pix-frontend.vercel.app"
+    origin:"https://simba-pix-frontend.vercel.app",  methods: ["GET", "POST"],
+    credentials: true
   }
 })
 io.on("connection",(socket)=>{
@@ -55,7 +55,9 @@ io.emit("receive_album",data)
 
 dotenv.config();
 
-app.use(cors({ credentials: true, origin:"https://simba-pix-frontend.vercel.app"}));
+app.use(cors({  origin:"https://simba-pix-frontend.vercel.app", 
+    methods: ["GET", "POST"],
+    credentials: true}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
