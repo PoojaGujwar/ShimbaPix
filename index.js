@@ -22,10 +22,10 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "https://simba-pix-frontend.vercel.app",
-    methods: ["GET", "POST"],
     credentials: true,
   },
 });
+
 io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
   socket.on("send_album", async (data) => {
@@ -57,7 +57,6 @@ dotenv.config();
 app.use(
   cors({
     origin: "https://simba-pix-frontend.vercel.app",
-    methods: ["GET", "POST"],
     credentials: true,
   })
 );
@@ -76,7 +75,7 @@ const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
 app.get("/auth/google", (req, res) => {
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://shimbapix.onrender.com/auth/google/callback&response_type=code&scope=profile email`;
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://shimbapix.onrender.com/auth/google/callback&response_type=code&scope=profile email`
   res.redirect(googleAuthUrl);
 });
 
@@ -125,7 +124,6 @@ app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
 
     let googleUser = googleUserDataResponse.data;
     let user = await UserModel.findOne({ userId: googleUser.id });
-
     if (!user) {
       user = await UserModel.create({
         userId: googleUser.id,
@@ -133,13 +131,15 @@ app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
         email: googleUser.email,
       });
     }
-    res.json({ users: googleUserDataResponse.data });
+    console.log(user)
+    res.status(200).json(googleUser);
   } catch (error) {
     res.status(500).json({ error: "Could not fetch user Google profile." });
   }
 });
 
-app.post("/albums", async (req, res) => {
+app.post("/albums",verifyAccessToken,async (req, res) => {
+  console.log("/albums",req.cookies)
   try {
     const { name, description, ownerId, sharedUser } = req.body;
     if (!name || !description || !ownerId) {
