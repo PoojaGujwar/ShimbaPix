@@ -109,6 +109,10 @@ app.get("/auth/google/callback", async (req, res) => {
     console.error(error);
   }
 });
+app.get("/test-cookie", (req, res) => {
+  console.log("Test Cookie Route – Cookies:", req.cookies);
+  res.json({ cookies: req.cookies });
+});
 app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
   try {
     const { access_token } = req.cookies;
