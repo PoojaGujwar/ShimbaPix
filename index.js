@@ -21,7 +21,7 @@ const server=http.createServer(app)
 
 const io=new Server(server,{
   cors:{
-    origin:"http://localhost:3000"
+    origin:"https://simba-pix-frontend.vercel.app"
   }
 })
 io.on("connection",(socket)=>{
@@ -54,7 +54,7 @@ io.emit("receive_album",data)
 
 dotenv.config();
 
-app.use(cors({ credentials: true, origin:["http://localhost:3000", "https://shimbapix.onrender.com"]}));
+app.use(cors({ credentials: true, origin:["https://simba-pix-frontend.vercel.app", "https://shimbapix.onrender.com"]}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
@@ -100,7 +100,7 @@ app.get("/auth/google/callback", async (req, res) => {
     );
     accessToken = tokenResponse.data.access_token;
     setSecureCookie(res, accessToken);
-    return res.redirect(`${process.env.FRONTEND_URL}/v2/profile/google`);
+    return res.redirect(`https://simba-pix-frontend.vercel.app/v2/profile/google`);
   } catch (error) {
     console.error(error);
   }
