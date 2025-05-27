@@ -16,8 +16,9 @@ const UserModel = require("./models/user.model.js");
 const ShareData = require("./models/Shares.model.js")
 const PORT = 4000;
 const http = require('http')
+const https = require("https")
 const {Server} = require('socket.io')
-const server=http.createServer(app)
+const server=https.createServer(app)
 
 const io=new Server(server,{
   cors:{
@@ -54,7 +55,7 @@ io.emit("receive_album",data)
 
 dotenv.config();
 
-app.use(cors({ credentials: true, origin:["https://simba-pix-frontend.vercel.app", "https://shimbapix.onrender.com"]}));
+app.use(cors({ credentials: true, origin:"https://simba-pix-frontend.vercel.app"}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(bodyParser.json());
