@@ -20,7 +20,9 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 dotenv.config();
 
-
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
@@ -28,9 +30,7 @@ app.use(
      credentials: true,
   })
 );
-app.use(cookieParser());
-app.use(express.json());
-app.use(bodyParser.json());
+
 
 const io = new Server(server, {
   cors: {
@@ -77,6 +77,10 @@ cloudinary.config({
 const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
+app.get("/",(req,res)=>{
+  res.send("Hello Google")
+})
+
 app.get("/auth/google", (req, res) => {
   const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://shimbapix.onrender.com/auth/google/callback&response_type=code&scope=profile email`
   res.redirect(googleAuthUrl);
@@ -117,9 +121,10 @@ app.get("/test-cookie", (req, res) => {
   res.json({ cookies: req.cookies });
 });
 app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
+  console.log(req.cookies,"Pooja")
   try {
     const { access_token } = req.cookies;
-    console.log(access_token);
+  
     const googleUserDataResponse = await axios.get(
       "https://www.googleapis.com/oauth2/v2/userinfo",
       {
@@ -303,6 +308,6 @@ app.delete("/v1/shareData/:id", async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
