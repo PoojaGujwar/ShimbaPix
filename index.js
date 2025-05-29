@@ -35,7 +35,7 @@ app.use(
 const io = new Server(server, {
   cors: {
     origin: "https://simba-pix-frontend-ub7i.vercel.app",
-    credentials: true,
+    credentials:true
   },
 });
 
