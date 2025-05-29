@@ -24,7 +24,7 @@ dotenv.config();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://simba-pix-frontend-ub7i.vercel.app",
      credentials: true,
   })
 );
@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://simba-pix-frontend-ub7i.vercel.app",
     credentials: true,
   },
 });
@@ -78,7 +78,7 @@ const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
 app.get("/auth/google", (req, res) => {
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:${PORT}/auth/google/callback&response_type=code&scope=profile email`
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://shimbapix.onrender.com/auth/google/callback&response_type=code&scope=profile email`
   res.redirect(googleAuthUrl);
 });
 
@@ -97,7 +97,7 @@ app.get("/auth/google/callback", async (req, res) => {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
-        redirect_uri: `http://localhost:${PORT}/auth/google/callback`,
+        redirect_uri: `https://shimbapix.onrender.com/auth/google/callback`,
       },
       {
         headers: {
