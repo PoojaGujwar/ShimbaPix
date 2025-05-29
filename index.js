@@ -8,7 +8,7 @@ const axios = require("axios");
 const cloudinary = require("cloudinary");
 const multer = require("multer");
 const bodyParser = require("body-parser");
-const { verifyAccessToken } = require("./middleware");
+const { verifyAccessToken } = require("./middleware/index.js");
 const { setSecureCookie } = require("./services/index.js");
 const Album = require("./models/Albums.model.js");
 const ImageV2 = require("./models/Images.model.js");
@@ -18,10 +18,23 @@ const PORT = 4000;
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
+dotenv.config();
+
+
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+     credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(express.json());
+app.use(bodyParser.json());
 
 const io = new Server(server, {
   cors: {
-    origin: "https://simba-pix-frontend.vercel.app",
+    origin: "http://localhost:3000",
     credentials: true,
   },
 });
@@ -52,17 +65,7 @@ io.on("connection", (socket) => {
   });
 });
 
-dotenv.config();
 
-app.use(
-  cors({
-    origin: "https://simba-pix-frontend.vercel.app",
-    credentials: true,
-  })
-);
-app.use(cookieParser());
-app.use(express.json());
-app.use(bodyParser.json());
 
 initializeDatabase();
 
@@ -75,7 +78,7 @@ const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
 app.get("/auth/google", (req, res) => {
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://shimbapix.onrender.com/auth/google/callback&response_type=code&scope=profile email`
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:${PORT}/auth/google/callback&response_type=code&scope=profile email`
   res.redirect(googleAuthUrl);
 });
 
@@ -94,7 +97,7 @@ app.get("/auth/google/callback", async (req, res) => {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
-        redirect_uri: `https://shimbapix.onrender.com/auth/google/callback`,
+        redirect_uri: `http://localhost:${PORT}/auth/google/callback`,
       },
       {
         headers: {
