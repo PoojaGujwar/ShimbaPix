@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "simba-pix-av1bt07wn-pooja-gujwars-projects.vercel.app",
+    origin: "https://simba-pix-av1bt07wn-pooja-gujwars-projects.vercel.app",
      credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -36,7 +36,7 @@ app.use(
 
 const io = new Server(server, {
   cors: {
-    origin: "simba-pix-av1bt07wn-pooja-gujwars-projects.vercel.app",
+    origin: "https://simba-pix-av1bt07wn-pooja-gujwars-projects.vercel.app",
     credentials:true
   },
 });
