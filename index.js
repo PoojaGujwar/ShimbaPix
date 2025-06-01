@@ -14,11 +14,11 @@ const Album = require("./models/Albums.model.js");
 const ImageV2 = require("./models/Images.model.js");
 const UserModel = require("./models/user.model.js");
 const ShareData = require("./models/Shares.model.js");
-const PORT = 4000;
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 dotenv.config();
+const port = process.env.PORT || 4000;
 
 app.use(cookieParser());
 app.use(express.json());
@@ -310,6 +310,6 @@ app.delete("/v1/shareData/:id", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
