@@ -26,8 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://simba-pix-ui.vercel.app/",
-     credentials: true,
+    origin: "https://simba-pix-ui.vercel.app",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
   })
@@ -35,9 +35,9 @@ app.use(
 
 
 const io = new Server(server, {
-  cors: {
+  cors:{
     origin: "https://simba-pix-ui.vercel.app",
-    credentials:true
+    credentials:true,
   },
 });
 
@@ -137,6 +137,7 @@ app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
     );
 
     let googleUser = googleUserDataResponse.data;
+    console.log(googleUserDataResponse)
     let user = await UserModel.findOne({ userId: googleUser.id });
     if (!user) {
       user = await UserModel.create({
@@ -166,8 +167,7 @@ app.post("/albums",verifyAccessToken,async (req, res) => {
     console.log(error.message);
     res.status(500).json({ message: "Album post error", error: error });
   }
-});
-
+})
 app.get("/albums", verifyAccessToken, async (req, res) => {
   try {
     const allAlbums = await Album.find();
@@ -259,7 +259,7 @@ app.post("/images", upload.single("image"), async (req, res) => {
   }
 });
 
-app.get("/images", verifyAccessToken, async (req, res) => {
+app.get("/images", async (req, res) => {
   try {
     const images = await ImageV2.find();
     res.status(200).json(images);
