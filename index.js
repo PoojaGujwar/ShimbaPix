@@ -310,6 +310,6 @@ app.delete("/v1/shareData/:id", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
