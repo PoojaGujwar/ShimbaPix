@@ -18,7 +18,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 dotenv.config();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4000 ||10000;
 
 app.use(cookieParser());
 app.use(express.json());
