@@ -153,7 +153,7 @@ app.get("/user/profile/google", verifyAccessToken, async (req, res) => {
   }
 });
 
-app.post("/albums",verifyAccessToken,async (req, res) => {
+app.post("/albums",async (req, res) => {
   console.log("/albums",req.cookies)
   try {
     const { name, description, ownerId, sharedUser } = req.body;
@@ -168,7 +168,7 @@ app.post("/albums",verifyAccessToken,async (req, res) => {
     res.status(500).json({ message: "Album post error", error: error });
   }
 })
-app.get("/albums", verifyAccessToken, async (req, res) => {
+app.get("/albums",  async (req, res) => {
   try {
     const allAlbums = await Album.find();
     res.status(200).json(allAlbums);
