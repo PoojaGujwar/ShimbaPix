@@ -309,6 +309,27 @@ app.delete("/v1/shareData/:id", async (req, res) => {
       .json({ message: "Error while delete share album", error: error });
   }
 });
+app.post("/v1/shareData",async(req,res)=>{
+  const {albumId, sender, receiver} = req.body
+
+  if(!albumId || !sender || !receiver){
+    return res.status(400).json({message: "Missing require fields"})
+  }
+  try {
+    //duplicate check
+    const alreadyShared = await ShareData.findOne({
+      album:albumId, receiver
+    })
+    if(alreadyShared){
+      return res.status(400).json({message:"Album already shared with this user"})
+    }
+    const share = await ShareData.create({album:albumId, sender, receiver})
+    res.status(201).json({message:"Album shared successfully",data:share})
+
+  } catch (error) {
+    res.status(500).json({message:"Error sharing album",error})
+  }
+})
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
